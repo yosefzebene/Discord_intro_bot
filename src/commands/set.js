@@ -23,12 +23,23 @@ module.exports = {
             return;
         }
 
+        // Make sure the sounds folder exists
+        const soundsDir = './src/sounds/';
+        if (!fs.existsSync(soundsDir)) {
+            fs.mkdirSync(soundsDir, { recursive: true });
+        }
+
         // Download uploaded audio file to sounds
-        const file = fs.createWriteStream(`./src/sounds/${attachment.name}`);
-        
+        const file = fs.createWriteStream(`${soundsDir}${attachment.name}`);
         Https.get(attachment.url, response => {
             response.pipe(file);
         })
+
+        // Make sure the data folder exists
+        const dataDir = './src/data/';
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
 
         // Create record for user
         const path = './src/data/users.json';
